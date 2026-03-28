@@ -50,7 +50,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, rank }: Leaderboard
         <div className="flex-1 min-w-0">
           <p className="font-semibold text-xs text-gray-900">{entry.displayName}</p>
           <div className="flex items-center gap-1 mt-0.5">
-            <span className="text-xs font-medium text-gray-700">{entry.xp.toLocaleString()} XP</span>
+            <span className="text-xs font-medium text-gray-700">{(entry.hours ?? 0)} hrs</span>
             <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-800">
               Lvl {entry.level}
             </span>
@@ -70,7 +70,7 @@ const LeaderboardRow = memo(function LeaderboardRow({ entry, rank }: Leaderboard
           </div>
         </div>
         <div className="flex items-center justify-between pl-9">
-          <span className="text-sm font-medium text-gray-700">{entry.xp.toLocaleString()} XP</span>
+          <span className="text-sm font-medium text-gray-700">{(entry.hours ?? 0)} hrs</span>
           {levelBadge}
         </div>
       </div>

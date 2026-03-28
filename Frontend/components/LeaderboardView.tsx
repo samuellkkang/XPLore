@@ -13,8 +13,8 @@ interface LeaderboardViewProps {
 const LeaderboardView = memo(function LeaderboardView({ users, currentUserId }: LeaderboardViewProps) {
   // Memoize the leaderboard rankings to avoid recalculating on every render
   const eventsAttendedRanking = useMemo(() => {
-    return users
-      .sort((a, b) => b.xp - a.xp)
+    return [...users]
+      .sort((a, b) => b.hours - a.hours)
       .slice(0, 5);
   }, [users]);
 
@@ -31,10 +31,11 @@ const LeaderboardView = memo(function LeaderboardView({ users, currentUserId }: 
             displayName: user.displayName,
             city: user.city,
             xp: user.xp,
+            hours: user.hours,
             level: user.level,
           };
           const isCurrentUser = user.id === currentUserId;
-          
+
           return (
             <div
               key={user.id}
