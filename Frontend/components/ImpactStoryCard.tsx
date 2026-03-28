@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { User } from "@/lib/mock-data";
 
 interface ImpactStoryCardProps {
@@ -16,7 +17,8 @@ function generateNarrative(user: User): string {
   return `${firstName} has volunteered approximately ${timesVolunteered} times, earned ${user.xp.toLocaleString()} XP, reached Level ${user.level}, and maintained ${streakText}. With ${user.badges.length} badge${user.badges.length !== 1 ? "s" : ""} earned, ${firstName} is making a real difference in ${user.city}.`;
 }
 
-export default function ImpactStoryCard({ user }: ImpactStoryCardProps) {
+// Server Component - no "use client" needed, memoized to prevent unnecessary re-renders
+const ImpactStoryCard = memo(function ImpactStoryCard({ user }: ImpactStoryCardProps) {
   const narrative = generateNarrative(user);
 
   return (
@@ -27,4 +29,6 @@ export default function ImpactStoryCard({ user }: ImpactStoryCardProps) {
       <p className="text-amber-800 leading-relaxed">{narrative}</p>
     </div>
   );
-}
+});
+
+export default ImpactStoryCard;

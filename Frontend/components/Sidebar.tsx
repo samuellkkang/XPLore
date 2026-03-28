@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Opportunities", href: "/opportunities" },
   { label: "Leaderboard", href: "/leaderboard" },
-  { label: "Dashboard", href: "/dashboard" },
+  { label: "Profile", href: "/profile" },
 ];
 
 export default function Sidebar() {
@@ -19,7 +19,7 @@ export default function Sidebar() {
       {/* Logo */}
       <Link href="/" className="flex items-center gap-2 font-bold text-lg px-4 py-3 mb-2">
         <Leaf className="w-6 h-6" />
-        <span>VolunteerQuest</span>
+        <span>XPLore</span>
       </Link>
 
       {/* Nav links */}

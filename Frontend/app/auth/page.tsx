@@ -39,7 +39,7 @@ export default function AuthPage() {
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-md p-8 space-y-6">
         {/* Header */}
         <div className="text-center space-y-1">
-          <h1 className="text-2xl font-bold text-[#2D6A4F]">Welcome to VolunteerQuest</h1>
+          <h1 className="text-2xl font-bold text-[#2D6A4F]">Welcome to XPLore</h1>
           <p className="text-sm text-gray-500">Sign in or create an account to get started.</p>
         </div>
 

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { LeaderboardEntry } from "@/lib/mock-data";
 
 interface LeaderboardRowProps {
@@ -16,7 +17,8 @@ function getInitial(displayName: string): string {
   return displayName.charAt(0).toUpperCase();
 }
 
-export default function LeaderboardRow({ entry, rank }: LeaderboardRowProps) {
+// Server Component - memoized to prevent unnecessary re-renders
+const LeaderboardRow = memo(function LeaderboardRow({ entry, rank }: LeaderboardRowProps) {
   const rankColorClass = getRankColorClass(rank);
 
   const avatar = entry.avatarUrl ? (
@@ -40,19 +42,20 @@ export default function LeaderboardRow({ entry, rank }: LeaderboardRowProps) {
   return (
     <>
       {/* Desktop: horizontal row ≥768px */}
-      <div className="hidden md:flex items-center gap-4 px-4 py-3 bg-white rounded-lg border border-gray-100 hover:shadow-sm transition-shadow">
-        <span className={`w-8 text-center font-bold text-lg ${rankColorClass}`}>
+      <div className="hidden md:flex items-center gap-2 px-3 py-2 bg-white rounded-lg border border-gray-100 hover:shadow-sm transition-shadow">
+        <span className={`w-6 text-center font-bold text-base ${rankColorClass}`}>
           {rank}
         </span>
         <div className="flex-shrink-0">{avatar}</div>
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-gray-900 truncate">{entry.displayName}</p>
-          <p className="text-sm text-gray-500 truncate">{entry.city}</p>
+          <p className="font-semibold text-xs text-gray-900">{entry.displayName}</p>
+          <div className="flex items-center gap-1 mt-0.5">
+            <span className="text-xs font-medium text-gray-700">{entry.xp.toLocaleString()} XP</span>
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-800">
+              Lvl {entry.level}
+            </span>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="font-semibold text-gray-900">{entry.xp.toLocaleString()} XP</p>
-        </div>
-        <div>{levelBadge}</div>
       </div>
 
       {/* Mobile: compact card <768px */}
@@ -64,7 +67,6 @@ export default function LeaderboardRow({ entry, rank }: LeaderboardRowProps) {
           <div className="flex-shrink-0">{avatar}</div>
           <div className="flex-1 min-w-0">
             <p className="font-semibold text-gray-900 truncate">{entry.displayName}</p>
-            <p className="text-xs text-gray-500 truncate">{entry.city}</p>
           </div>
         </div>
         <div className="flex items-center justify-between pl-9">
@@ -74,4 +76,6 @@ export default function LeaderboardRow({ entry, rank }: LeaderboardRowProps) {
       </div>
     </>
   );
-}
+});
+
+export default LeaderboardRow;

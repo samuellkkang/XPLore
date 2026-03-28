@@ -12,7 +12,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "VolunteerQuest",
+  title: "XPLore",
   description: "Gamified local volunteer discovery platform",
 };
 

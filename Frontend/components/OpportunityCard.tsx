@@ -1,16 +1,20 @@
 "use client";
 
+import { useState, memo, useCallback } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { Opportunity } from "@/lib/mock-data";
 
 interface OpportunityCardProps {
   opportunity: Opportunity;
 }
 
-export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
+// Memoized to prevent unnecessary re-renders
+const OpportunityCard = memo(function OpportunityCard({ opportunity }: OpportunityCardProps) {
   const router = useRouter();
+  const [imageLoading, setImageLoading] = useState(true);
 
   const spotsRemaining = opportunity.spotsTotal - opportunity.spotsFilled;
   const formattedDate = new Date(opportunity.date).toLocaleDateString("en-US", {
@@ -20,16 +24,29 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
     year: "numeric",
   });
 
+  const handleImageLoad = useCallback(() => {
+    setImageLoading(false);
+  }, []);
+
+  const handleMoreInfo = useCallback(() => {
+    router.push("/opportunities/" + opportunity.id);
+  }, [router, opportunity.id]);
+
   return (
     <div className="rounded-xl border border-border bg-background overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
       {/* Image container */}
       <div className="relative h-48 w-full bg-muted">
+        {imageLoading && (
+          <Skeleton className="absolute inset-0 rounded-none" />
+        )}
         <Image
           src={opportunity.imageUrl}
           alt={opportunity.title}
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          onLoad={handleImageLoad}
+          priority={false}
         />
         {/* XP chip */}
         <span className="absolute top-2 right-2 bg-[#F59E0B] text-white text-xs font-semibold px-2 py-1 rounded-full">
@@ -69,7 +86,7 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
         <div className="mt-auto pt-2">
           <Button
             className="w-full bg-[#2D6A4F] hover:bg-[#245a42] text-white"
-            onClick={() => router.push("/opportunities/" + opportunity.id)}
+            onClick={handleMoreInfo}
           >
             More Info
           </Button>
@@ -77,4 +94,6 @@ export default function OpportunityCard({ opportunity }: OpportunityCardProps) {
       </div>
     </div>
   );
-}
+});
+
+export default OpportunityCard;

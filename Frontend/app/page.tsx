@@ -13,7 +13,7 @@ export default function Home() {
           {/* Wordmark */}
           <div className="flex items-center gap-2 text-2xl font-bold">
             <span aria-hidden="true">🌿</span>
-            <span>VolunteerQuest</span>
+            <span>XPLore</span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
@@ -99,7 +99,7 @@ export default function Home() {
             Level Up Your Impact
           </h2>
           <p className="text-center text-gray-500 mb-12 max-w-xl mx-auto">
-            VolunteerQuest turns civic engagement into an adventure. Every action
+            XPLore turns civic engagement into an adventure. Every action
             you take earns rewards and recognition.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -136,7 +136,7 @@ export default function Home() {
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2 font-bold text-white text-lg">
             <span aria-hidden="true">🌿</span>
-            <span>VolunteerQuest</span>
+            <span>XPLore</span>
           </div>
           <nav className="flex flex-wrap gap-6 text-sm justify-center">
             <Link href="/" className="hover:text-white transition-colors">
@@ -153,7 +153,7 @@ export default function Home() {
             </Link>
           </nav>
           <p className="text-xs text-green-200">
-            &copy; {new Date().getFullYear()} VolunteerQuest. All rights reserved.
+            &copy; {new Date().getFullYear()} XPLore. All rights reserved.
           </p>
         </div>
       </footer>

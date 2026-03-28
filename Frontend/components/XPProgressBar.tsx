@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, memo } from "react"
 import { Progress } from "@/components/ui/progress"
 
 interface XPProgressBarProps {
@@ -9,7 +9,8 @@ interface XPProgressBarProps {
   level: number
 }
 
-export default function XPProgressBar({ currentXp, levelCapXp, level }: XPProgressBarProps) {
+// Memoized to prevent unnecessary re-renders
+const XPProgressBar = memo(function XPProgressBar({ currentXp, levelCapXp, level }: XPProgressBarProps) {
   const [progressValue, setProgressValue] = useState(0)
 
   const targetPercent = levelCapXp > 0 ? (currentXp / levelCapXp) * 100 : 0
@@ -36,4 +37,6 @@ export default function XPProgressBar({ currentXp, levelCapXp, level }: XPProgre
       />
     </div>
   )
-}
+})
+
+export default XPProgressBar
