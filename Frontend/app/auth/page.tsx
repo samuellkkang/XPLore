@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,9 +11,11 @@ export default function AuthPage() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [confirmationShown, setConfirmationShown] = useState(false);
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   function handleGoogleSignIn() {
-    // TODO: Google OAuth
+    signIn("google", { callbackUrl });
   }
 
   function handleMagicLink(e: React.FormEvent) {

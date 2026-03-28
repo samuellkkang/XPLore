@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useSession } from "next-auth/react";
 import ImpactStoryCard from "@/components/ImpactStoryCard";
 import OpportunityCard from "@/components/OpportunityCard";
 import RightSidebar from "@/components/RightSidebar";
@@ -9,8 +10,16 @@ import EventsMap from "@/components/EventsMap";
 import { currentUser, opportunities, upcomingSignups, users } from "@/lib/mock-data";
 
 export default function ProfilePage() {
-  // Memoize derived values to prevent recalculation on every render
-  const levelCapXp = useMemo(() => currentUser.level * 300, []);
+  const { data: session } = useSession();
+
+  // Use the signed-in user's name, falling back to mock data
+  const sessionName = session?.user?.name || session?.user?.email || currentUser.name;
+  const profileUser = useMemo(
+    () => ({ ...currentUser, name: sessionName, displayName: sessionName }),
+    [sessionName]
+  );
+
+  const levelCapXp = useMemo(() => profileUser.level * 300, [profileUser.level]);
   const eventsAttended = useMemo(
     () => upcomingSignups.filter((s) => s.status === "confirmed").length,
     []
@@ -22,7 +31,7 @@ export default function ProfilePage() {
       <div className="max-w-[1600px] mx-auto px-4 py-6">
         {/* Impact Story Card - Full width at top */}
         <div className="mb-6">
-          <ImpactStoryCard user={currentUser} />
+          <ImpactStoryCard user={profileUser} />
         </div>
 
         {/* Three-column grid layout */}
@@ -31,10 +40,10 @@ export default function ProfilePage() {
           <div className="space-y-6">
             {/* Page Header */}
             <PageHeader
-              displayName={currentUser.displayName}
+              displayName={profileUser.displayName}
               eventsAttended={eventsAttended}
-              level={currentUser.level}
-              currentXp={currentUser.xp}
+              level={profileUser.level}
+              currentXp={profileUser.xp}
               levelCapXp={levelCapXp}
             />
 

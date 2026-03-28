@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf } from "lucide-react";
+import { Leaf, LogOut } from "lucide-react";
+import { useSession, signOut } from "next-auth/react";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -13,6 +14,50 @@ const navLinks = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
+
+  const displayName =
+    status === "authenticated"
+      ? session?.user?.name || session?.user?.email || ""
+      : "";
+
+  let authControl: React.ReactNode;
+
+  if (status === "loading") {
+    authControl = (
+      <div className="px-4 py-2 rounded-md bg-white/20 animate-pulse h-9" />
+    );
+  } else if (status === "unauthenticated") {
+    authControl = (
+      <Link
+        href="/auth"
+        className={`block px-4 py-2 rounded-md bg-white text-[#2D6A4F] font-semibold text-sm text-center hover:bg-gray-100 transition-colors ${
+          pathname === "/auth" ? "ring-2 ring-offset-2 ring-white ring-offset-[#2D6A4F]" : ""
+        }`}
+      >
+        Sign In
+      </Link>
+    );
+  } else {
+    // authenticated
+    authControl = (
+      <div className="flex items-center gap-2 px-4 py-2 rounded-md bg-white/10">
+        {session?.user?.image && (
+          <img src={session.user.image} alt="" className="w-6 h-6 rounded-full" />
+        )}
+        <span className="truncate text-sm font-medium flex-1">
+          {displayName}
+        </span>
+        <button
+          onClick={() => signOut({ callbackUrl: "/" })}
+          className="text-white/70 hover:text-white transition-colors shrink-0"
+          aria-label="Sign out"
+        >
+          <LogOut className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  }
 
   return (
     <aside className="hidden md:flex flex-col w-56 bg-[#2D6A4F] text-white sticky top-0 h-screen py-4 px-3 gap-1">
@@ -35,15 +80,8 @@ export default function Sidebar() {
         </Link>
       ))}
 
-      {/* Sign In — directly below Dashboard */}
-      <Link
-        href="/auth"
-        className={`block px-4 py-2 rounded-md bg-white text-[#2D6A4F] font-semibold text-sm text-center hover:bg-gray-100 transition-colors ${
-          pathname === "/auth" ? "ring-2 ring-offset-2 ring-white ring-offset-[#2D6A4F]" : ""
-        }`}
-      >
-        Sign In
-      </Link>
+      {/* Auth control — Sign In / loading skeleton / Username_Display */}
+      {authControl}
     </aside>
   );
 }
