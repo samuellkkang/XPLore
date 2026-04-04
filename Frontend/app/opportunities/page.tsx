@@ -8,6 +8,8 @@ import SkeletonCard from "@/components/SkeletonCard";
 // Extract unique categories from opportunities
 const categories = Array.from(new Set(opportunities.map((o) => o.category)));
 
+const extraTags = ["Outdoor", "Weekend", "One-Time", "Recurring", "High XP"];
+
 export default function OpportunitiesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -21,14 +23,25 @@ export default function OpportunitiesPage() {
   }, []);
 
   function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // TODO: real filter logic
     setSearch(e.target.value);
   }
 
   function handleCategorySelect(category: string | null) {
-    // TODO: real filter logic
     setSelectedCategory(category);
   }
+
+  const filtered = opportunities.filter((opp) => {
+    const q = search.toLowerCase();
+    const matchesSearch =
+      !q ||
+      opp.title.toLowerCase().includes(q) ||
+      opp.category.toLowerCase().includes(q) ||
+      opp.location.toLowerCase().includes(q) ||
+      opp.org.toLowerCase().includes(q);
+    const matchesCategory =
+      !selectedCategory || opp.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,11 +57,11 @@ export default function OpportunitiesPage() {
             value={search}
             onChange={handleSearchChange}
             placeholder="Search opportunities..."
-            className="w-full max-w-xl border border-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
+            className="w-full border border-border rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2D6A4F]"
           />
         </div>
 
-        {/* Category filter chips */}
+        {/* Filter chips */}
         <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => handleCategorySelect(null)}
@@ -73,30 +86,37 @@ export default function OpportunitiesPage() {
               {cat}
             </button>
           ))}
+          {extraTags.map((tag) => (
+            <button
+              key={tag}
+              onClick={() => handleCategorySelect(tag)}
+              className={`px-3 py-1 rounded-full text-sm font-medium border transition-colors ${
+                selectedCategory === tag
+                  ? "bg-[#2D6A4F] text-white border-[#2D6A4F]"
+                  : "bg-background text-foreground border-border hover:border-[#2D6A4F]"
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
         </div>
 
-        {/* Main layout: grid + map */}
-        <div className="flex flex-col lg:flex-row gap-6">
-          {/* Opportunity grid */}
-          <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {isLoading
-                ? Array.from({ length: 6 }).map((_, i) => (
-                    <SkeletonCard key={i} />
-                  ))
-                : opportunities.map((opp) => (
-                    <OpportunityCard key={opp.id} opportunity={opp} />
-                  ))}
-            </div>
-          </div>
-
-          {/* Map placeholder */}
-          <div className="lg:w-80 xl:w-96 shrink-0">
-            <div className="sticky top-4 h-64 lg:h-[600px] rounded-xl bg-gray-200 flex items-center justify-center text-gray-500 font-medium">
-              {/* TODO: Mapbox GL JS */}
-              Map View
-            </div>
-          </div>
+        {/* Opportunity grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {isLoading
+            ? Array.from({ length: 8 }).map((_, i) => (
+                <SkeletonCard key={i} />
+              ))
+            : filtered.length > 0
+              ? filtered.map((opp) => (
+                  <OpportunityCard key={opp.id} opportunity={opp} />
+                ))
+              : (
+                <p className="col-span-full text-center text-muted-foreground py-12">
+                  No opportunities match your search.
+                </p>
+              )
+          }
         </div>
       </div>
     </div>
