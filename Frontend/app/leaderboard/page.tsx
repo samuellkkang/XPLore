@@ -3,17 +3,17 @@
 import { users, groups, LeaderboardEntry } from "@/lib/mock-data";
 
 const localEntries: LeaderboardEntry[] = [...users]
-  .sort((a, b) => b.hours - a.hours)
-  .map((u) => ({ id: u.id, displayName: u.displayName, city: u.city, xp: u.xp, hours: u.hours, level: u.level }));
+  .sort((a, b) => b.xp - a.xp)
+  .map((u) => ({ id: u.id, displayName: u.displayName, city: u.city, xp: u.xp, level: u.level }));
 
 const myGroupEntries: LeaderboardEntry[] = [...users]
   .slice(0, 5)
-  .sort((a, b) => b.hours - a.hours)
-  .map((u) => ({ id: u.id, displayName: u.displayName, city: u.city, xp: u.xp, hours: u.hours, level: u.level }));
+  .sort((a, b) => b.xp - a.xp)
+  .map((u) => ({ id: u.id, displayName: u.displayName, city: u.city, xp: u.xp, level: u.level }));
 
 const groupEntries: LeaderboardEntry[] = [...groups]
   .sort((a, b) => b.aggregateXp - a.aggregateXp)
-  .map((g) => ({ id: g.id, displayName: g.name, city: g.city, xp: g.aggregateXp, hours: Math.round(g.aggregateXp / 25), level: 1 }));
+  .map((g) => ({ id: g.id, displayName: g.name, city: g.city, xp: g.aggregateXp, level: 1 }));
 
 function rowBg(rank: number) {
   if (rank === 1) return "bg-yellow-50";
@@ -73,7 +73,7 @@ function LeaderboardTable({
                 </span>
               </td>
               <td className="px-3 py-2.5 text-right">
-                <span className="font-semibold text-gray-800">{(entry.hours ?? 0).toLocaleString()}</span>
+                <span className="font-semibold text-gray-800">{(entry.xp ?? 0).toLocaleString()}</span>
                 <span className="ml-1 text-xs text-gray-400">{valueLabel}</span>
               </td>
             </tr>
@@ -91,9 +91,9 @@ export default function LeaderboardPage() {
         <h1 className="text-3xl font-bold text-[#2D6A4F] mb-6 text-center">Leaderboards</h1>
 
         <div className="flex flex-col xl:flex-row gap-4">
-          <LeaderboardTable title="🏆 Local" entries={localEntries} valueLabel="hrs" />
-          <LeaderboardTable title="👥 My Group" entries={myGroupEntries} valueLabel="hrs" />
-          <LeaderboardTable title="🏢 Between Groups" entries={groupEntries} valueLabel="hrs" />
+          <LeaderboardTable title="🏆 Local" entries={localEntries} valueLabel="xp" />
+          <LeaderboardTable title="👥 My Group" entries={myGroupEntries} valueLabel="xp" />
+          <LeaderboardTable title="🏢 Between Groups" entries={groupEntries} valueLabel="xp" />
         </div>
 
         <p className="mt-6 text-xs text-gray-400 text-center">

@@ -14,7 +14,7 @@ const LeaderboardView = memo(function LeaderboardView({ users, currentUserId }: 
   // Memoize the leaderboard rankings to avoid recalculating on every render
   const eventsAttendedRanking = useMemo(() => {
     return [...users]
-      .sort((a, b) => b.hours - a.hours)
+      .sort((a, b) => b.xp - a.xp)
       .slice(0, 5);
   }, [users]);
 
